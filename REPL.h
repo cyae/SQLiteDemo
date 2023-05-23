@@ -1,3 +1,6 @@
+#ifndef REPL_H_
+#define REPL_H_
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -44,3 +47,5 @@ void print_prompt()
 {
     printf("db > ");
 }
+
+#endif
