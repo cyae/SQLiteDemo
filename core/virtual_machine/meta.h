@@ -1,8 +1,8 @@
-#ifndef META_COMMAND_H_
-#define META_COMMAND_H_
+#ifndef META_H_
+#define META_H_
 
 #include <string.h>
-#include "../REPL.h"
+#include "../interface/REPL.h"
 
 typedef enum
 {

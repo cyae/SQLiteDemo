@@ -1,11 +1,8 @@
-#ifndef COMMAND_H_
-#define COMMAND_H_
+#ifndef COMPILER_H_
+#define COMPILER_H_
 
-#include <string.h>
-#include "meta_command.h"
-#include "../REPL.h"
-#include "../model/row.h"
-#include "../model/table.h"
+#include "../interface/REPL.h"
+#include "../virtual_machine/executor.h"
 
 typedef enum
 {
@@ -15,18 +12,6 @@ typedef enum
     PREPARE_STRING_TOO_LONG,
     PREPARE_NEGATIVE_ID
 } PrepareResult;
-
-typedef enum
-{
-    STATEMENT_INSERT,
-    STATEMENT_SELECT
-} StatementType;
-
-typedef struct
-{
-    StatementType type;
-    Row row_to_insert;
-} Statement;
 
 // SQL Compiler
 // Since the naive wrapping over scanf will cause overflow into writing buffer
@@ -73,50 +58,14 @@ PrepareResult prepare_statement(InputBuffer *input_buffer, Statement *statement)
     {
         return prepare_insert(input_buffer, statement);
     }
-}
 
-typedef enum
-{
-    EXECUTE_TABLE_FULL,
-    EXECUTE_SUCCESS
-} ExecuteResult;
-
-ExecuteResult execute_insert(Statement *statement, Table *table)
-{
-    if (table->num_rows >= TABLE_MAX_ROWS)
+    if (strcmp(input_buffer->buffer, "select") == 0)
     {
-        return EXECUTE_TABLE_FULL;
+        statement->type = STATEMENT_SELECT;
+        return PREPARE_SUCCESS;
     }
 
-    Row *row_to_insert = &(statement->row_to_insert);
-
-    serialize_row(row_to_insert, row_slot(table, table->num_rows));
-    table->num_rows += 1;
-
-    return EXECUTE_SUCCESS;
-}
-
-ExecuteResult execute_select(Statement *Statement, Table *table)
-{
-    Row row;
-    for (__uint32_t i = 0; i < table->num_rows; i++)
-    {
-        deserialize_row(row_slot(table, i), &row);
-        print_row(&row);
-    }
-
-    return EXECUTE_SUCCESS;
-}
-
-ExecuteResult execute_statement(Statement *statement, Table *table)
-{
-    switch (statement->type)
-    {
-    case STATEMENT_INSERT:
-        return execute_insert(statement, table);
-    case STATEMENT_SELECT:
-        return execute_select(statement, table);
-    }
+    return PREPARE_UNRECOGNIZED_STATEMENT;
 }
 
 #endif

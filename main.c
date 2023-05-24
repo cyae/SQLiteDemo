@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-#include "./command/command.h"
+
+#include "core/interface/REPL.h"
+#include "core/virtual_machine/meta.h"
+#include "core/virtual_machine/executor.h"
+#include "core/compiler/compiler.h"
+#include "model/table.h"
 
 int main(int argc, char const *argv[])
 {
