@@ -12,8 +12,8 @@
 typedef struct
 {
     __uint32_t id;
-    char username[COLUMN_USERNAME_SIZE];
-    char email[COLUMN_EMAIL_SIZE];
+    char username[COLUMN_USERNAME_SIZE + 1]; // +1 for ending marker in C string
+    char email[COLUMN_EMAIL_SIZE + 1];       // same as above
 } Row;
 
 void print_row(Row *row)
