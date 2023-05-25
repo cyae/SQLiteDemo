@@ -4,7 +4,7 @@
 #include <string.h>
 #include "../interface/REPL.h"
 #include "../../model/row.h"
-#include "../../model/table.h"
+#include "../../backend/indexing.h"
 
 typedef enum
 {
